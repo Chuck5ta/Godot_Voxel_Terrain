@@ -5,12 +5,10 @@ public class PlayerController : KinematicBody
 {
     // KinematicBody player; // ????????
     public float moveSpeed = 5f;
-    public float sensitivity = 1;
-    Vector3 euler; // (oiler) used in the calculation for rotating the player character
-
+    // Vector3 euler; // (oiler) used in the calculation for rotating the player character
+    float turningSpeed = 0.01f;
     private float rotationX = 0f;
     private float rotationY = 0f;
-    float LookAroundSpeed = 0.01f;
 
 
     // Called when the node enters the scene tree for the first time.
@@ -31,43 +29,50 @@ public class PlayerController : KinematicBody
     public override void _UnhandledKeyInput(InputEventKey keyEvent)
     {
         base._UnhandledKeyInput(keyEvent);
-
-        if (keyEvent.Scancode == (int)KeyList.W) // Move forwards
+        
+        // Move forwards
+        if (keyEvent.Scancode == (int)KeyList.W) 
         {
             MoveAndSlide(-Transform.basis.z * moveSpeed);
         }
-        else if (keyEvent.Scancode == (int)KeyList.S) // Move backwards
+        // Move backwards
+        else if (keyEvent.Scancode == (int)KeyList.S) 
         {
             MoveAndSlide(Transform.basis.z * moveSpeed);
         }
-        else if (keyEvent.Scancode == (int)KeyList.A) // Move to the left
+        // Move to the left
+        else if (keyEvent.Scancode == (int)KeyList.A) 
         {
             MoveAndSlide(-Transform.basis.x * moveSpeed);
         }
-        else if (keyEvent.Scancode == (int)KeyList.D) // Move to the right
+        // Move to the right
+        else if (keyEvent.Scancode == (int)KeyList.D) 
         {
             MoveAndSlide(Transform.basis.x * moveSpeed);
         }
-        else if (keyEvent.Scancode == (int)KeyList.R) // Move upwards
+        // Move upwards
+        else if (keyEvent.Scancode == (int)KeyList.R) 
         {
             MoveAndSlide(Transform.basis.y * moveSpeed);
         }
-        else if (keyEvent.Scancode == (int)KeyList.F) // Move downwards
+        // Move downwards
+        else if (keyEvent.Scancode == (int)KeyList.F) 
         {
             MoveAndSlide(-Transform.basis.y * moveSpeed);
         }
     }
 
     /*
-     * Rotate the Player character
+     * Rotate/turn the Player character
+     * This only requires the mouse to move, not for a button to be pressed
      */
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventMouseMotion mouseMotion)
         {
             // modify accumulated mouse rotation
-            rotationX += -mouseMotion.Relative.x * LookAroundSpeed;
-            rotationY += -mouseMotion.Relative.y * LookAroundSpeed;
+            rotationX += -mouseMotion.Relative.x * turningSpeed;
+            rotationY += -mouseMotion.Relative.y * turningSpeed;
 
             // reset rotation
             Transform transform = Transform;
@@ -79,7 +84,7 @@ public class PlayerController : KinematicBody
         }
     }
 
-    // TODO: DELETE THIS WHEN NO LONGER NEEDED
+    // TODO: Use this for manipulating the terrain (digging/building)
     public override void _UnhandledInput(InputEvent mouseEvent)
     {
         base._UnhandledInput(mouseEvent);
@@ -98,28 +103,5 @@ public class PlayerController : KinematicBody
             }
         }
 
-    }
-
-
-    // TODO: DELETE THIS WHEN NO LONGER NEEDED
-    public void ChangeDirection()
-    {
-        // Due to technical limitations on structs in C# the default
-        // constructor will contain zero values for all fields.
-        var defaultBasis = new Basis();
-        GD.Print(defaultBasis); // prints: ((0, 0, 0), (0, 0, 0), (0, 0, 0))
-
-        // Instead we can use the Identity property.
-        var identityBasis = Basis.Identity;
-        GD.Print(identityBasis.x); // prints: (1, 0, 0)
-        GD.Print(identityBasis.y); // prints: (0, 1, 0)
-        GD.Print(identityBasis.z); // prints: (0, 0, 1)
-
-        // The Identity basis is equivalent to:
-        var basis = new Basis(Vector3.Right, Vector3.Up, Vector3.Back);
-        GD.Print(basis); // prints: ((1, 0, 0), (0, 1, 0), (0, 0, 1))
-
-
-        RotateObjectLocal(Vector3.Right, Mathf.Pi);
     }
 }

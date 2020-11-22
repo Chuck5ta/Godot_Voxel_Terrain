@@ -14,7 +14,7 @@ public class Primitive : MeshInstance
 
     void generateTriangle()
     {
-        GD.Print("TRIANGLE??");
+     //   GD.Print("TRIANGLE??");
         // Generate triangle mesh
         Vector3[] vertices = { new Vector3(0f, 1f, 0f),
                                 new Vector3(1f, 0f, 0f),
