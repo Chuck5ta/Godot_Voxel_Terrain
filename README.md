@@ -12,7 +12,7 @@ Game Engine: Godot
 
 Programming language: C#
 
-IDE: Visual Studio 2020
+IDE: Visual Studio 2019
 
 O/S: MS Windows 10
 

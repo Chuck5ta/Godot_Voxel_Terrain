@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scripts/PlayerController.cs" type="Script" id=1]
+
+[sub_resource type="CSharpScript" id=1]
+resource_name = "Cube"
+script/source = "using Godot;
+using System;
+
+public class Cube : Spatial
+{
+    // Declare member variables here. Examples:
+    // private int a = 2;
+    // private string b = \"text\";
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        
+    }
+
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//      
+//  }
+}
+"
+
+[sub_resource type="CSharpScript" id=3]
+resource_name = "CameraController"
+script/source = "using Godot;
+using System;
+
+public class CameraController : Camera
+{
+    // Declare member variables here. Examples:
+    // private int a = 2;
+    // private string b = \"text\";
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(float delta)
+    {
+      
+    }
+}
+"
+
+[node name="Game" type="Spatial"]
+script = SubResource( 1 )
+
+[node name="Player" type="KinematicBody" parent="."]
+script = ExtResource( 1 )
+
+[node name="Camera" type="Camera" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 0.80998, 0.586457, 0, -0.586457, 0.80998, 0.0106359, 1.07972, 1.81851 )
+script = SubResource( 3 )
