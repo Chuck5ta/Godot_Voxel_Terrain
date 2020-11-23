@@ -15,7 +15,7 @@ public class Game : Spatial
         //   GD.Print("hello");
         //BuildWorld();
 
-        // Generate triangle mesh
+        // Generate quad mesh (2 triangles)
 
         // 1st location in the array (0)
         Vector3[] vertices = { new Vector3(0, 1, 0),
@@ -32,28 +32,24 @@ public class Game : Spatial
                           new Vector2(1f, 0f) }; //bottom-right
 
         // Normals
-        Vector3[] normals = new Vector3[4] { Vector3.Up, Vector3.Up, Vector3.Up, Vector3.Up };
-
-
+        Vector3[] normals = new Vector3[4] 
+            { Vector3.Up, Vector3.Up, Vector3.Up, Vector3.Up };
 
         // 4th location in the array (3)
-     //      Color[] colors = { new Color(1, 1, 1, 1), // blue
-     //                          new Color(1, 1, 1, 1),
-     //                          new Color(1, 1, 1, 1),
-     //                          new Color(1, 1, 1, 1) }; 
-
-        //    var[] arrays;
+  //      Color[] colors = { new Color(1, 0, 0, 1), // blue
+  //                          new Color(1, 0, 0, 1),
+  //                          new Color(1, 0, 0, 1),
+  //                          new Color(1, 0, 0, 1) }; 
 
         Godot.Collections.Array arrays = new Godot.Collections.Array();
         arrays.Resize(9);
-        //    arrays.Resize((int)ArrayMesh.ArrayType.Max);
+
         arrays[0] = vertices;
         arrays[1] = normals;
-     //   arrays[3] = colors;
+   //     arrays[3] = colors; // not working!
         arrays[4] = uvs;
         arrays[8] = index;
 
-        //  arrays[ArrayMesh.ArrayType.Vertex] = vertices;
         // Create the Mesh.     
 
         // Initialize the ArrayMesh.
@@ -63,9 +59,14 @@ public class Game : Spatial
         MeshInstance quad = new MeshInstance();
         quad.Mesh = arr_mesh;
 
-        AddChild(quad); // make the mesh a chils of the Game node
+        // Set the material and colour
+        SpatialMaterial newMaterial = new SpatialMaterial();
+        newMaterial.AlbedoColor = new Color(1, 0, 0, 1); // red
+        quad.MaterialOverride = newMaterial;
 
-      //  GenMesh();
+        AddChild(quad); // make the mesh a child of the Game node
+
+        //  GenMesh();
     }
 
     void GenMesh()
