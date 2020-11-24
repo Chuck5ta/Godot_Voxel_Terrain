@@ -4,69 +4,20 @@ using System.Collections;
 
 public class Game : Spatial
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    public Cube[,,] chunkData;
 
 
-   // Called when the node enters the scene tree for the first time.
-   public override void _Ready()
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
     {
-        //   GD.Print("hello");
-        //BuildWorld();
+        GD.Print("Game cs - Starting");
+        chunkData = new Cube[4, 4, 4];
+        chunkData[0, 0, 0] = new Cube();
+        GD.Print("Game cs - calling Drawing cube");
+        chunkData[0, 0, 0].DrawCube();
+     //   chunkData[0, 0, 0].CreateQuad();
 
-        // Generate quad mesh (2 triangles)
-
-        // 1st location in the array (0)
-        Vector3[] vertices = { new Vector3(0, 1, 0),
-                               new Vector3(0, 1, 1),
-                               new Vector3(1, 1, 0),
-                               new Vector3(1, 1, 1) };
-
-        int[] index = new int[6] { 0, 1, 2, 3, 2, 1 };
-
-        // UVs
-        Vector2[] uvs = { new Vector2(0f, 1f),   //top-left
-                          new Vector2(1f, 1f),   //top-right
-                          new Vector2(0f, 0f),   //bottom-left
-                          new Vector2(1f, 0f) }; //bottom-right
-
-        // Normals
-        Vector3[] normals = new Vector3[4] 
-            { Vector3.Up, Vector3.Up, Vector3.Up, Vector3.Up };
-
-        // 4th location in the array (3)
-  //      Color[] colors = { new Color(1, 0, 0, 1), // blue
-  //                          new Color(1, 0, 0, 1),
-  //                          new Color(1, 0, 0, 1),
-  //                          new Color(1, 0, 0, 1) }; 
-
-        Godot.Collections.Array arrays = new Godot.Collections.Array();
-        arrays.Resize(9);
-
-        arrays[0] = vertices;
-        arrays[1] = normals;
-   //     arrays[3] = colors; // not working!
-        arrays[4] = uvs;
-        arrays[8] = index;
-
-        // Create the Mesh.     
-
-        // Initialize the ArrayMesh.
-        ArrayMesh arr_mesh = new ArrayMesh();
-        
-        arr_mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
-        MeshInstance quad = new MeshInstance();
-        quad.Mesh = arr_mesh;
-
-        // Set the material and colour
-        SpatialMaterial newMaterial = new SpatialMaterial();
-        newMaterial.AlbedoColor = new Color(1, 0, 0, 1); // red
-        quad.MaterialOverride = newMaterial;
-
-        AddChild(quad); // make the mesh a child of the Game node
-
-        //  GenMesh();
+        AddChild(chunkData[0, 0, 0]); // place cube into the world
     }
 
     void GenMesh()
