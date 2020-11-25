@@ -7,6 +7,8 @@ public class Cube : Node
 
     public Vector3 cubeLocation;
 
+    public Color cubeColour;
+
    // private Material cubeMaterial = CustomMaterials.RetrieveMaterial(CustomMaterials.rockQuad);
 
     public Vector3[] frontQuadVertices = new Vector3[4];
@@ -32,10 +34,11 @@ public class Cube : Node
     //  }
 
     // Cube contructor
-    public Cube()
+    public Cube(Vector3 cubePosition, Color cubeColour)
     {
         GD.Print("Cube constructor");
-        //    cubeLocation = cubePosition;
+        cubeLocation = cubePosition;
+        this.cubeColour = cubeColour;
         cube = new Node();
     //    this.currentX = currentX;
     //    this.currentY = currentY;
@@ -66,7 +69,7 @@ public class Cube : Node
         
         Godot.Collections.Array arrays = new Godot.Collections.Array();
         arrays.Resize(9);
-
+        // see 
         arrays[0] = vertices;
         arrays[1] = normals;
         arrays[4] = uvs;
@@ -83,7 +86,8 @@ public class Cube : Node
 
         // Set the material and colour
         SpatialMaterial newMaterial = new SpatialMaterial();
-        newMaterial.AlbedoColor = new Color(1, 0, 0, 1); // red
+    //    newMaterial.AlbedoColor = new Color(1, 0, 0, 1); // red
+        newMaterial.AlbedoColor = cubeColour; // red
         quad.MaterialOverride = newMaterial;
 
         AddChild(quad); // add quad to the cube node (makes it visible?)
