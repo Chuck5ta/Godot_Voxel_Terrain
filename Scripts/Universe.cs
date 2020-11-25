@@ -10,7 +10,7 @@ using System;
  *
  */
 
-public class Universe : Spatial
+public class Universe : Node
 {
     public static Planet planet;
 
@@ -20,7 +20,6 @@ public class Universe : Spatial
     void GeneratePlanet()
     {
         planet = new Planet();
-        planet.GenerateWorld();
         AddChild(planet); // add planet to universe
     }
 

@@ -1,9 +1,12 @@
 using Godot;
 using System;
 
-public class PlanetChunk : Node
+public class PlanetChunk : Spatial
 {
     public Cube[,,] chunkData;
+    public Planet planet;
+
+    public Node planetChunk;
 
 
     // Called when the node enters the scene tree for the first time.
@@ -27,8 +30,13 @@ public class PlanetChunk : Node
      * 
      * e.g. chunk 0 will be based at 0,0,0 in the Universe
      */
-    public PlanetChunk()
+    public PlanetChunk(Planet owner)
     {
+        planet = owner;
+        chunkData = new Cube[planet.chunkSize, planet.chunkSize, planet.chunkSize];
+
+        //planetChunk = new Node();
+        
     }
 
     /*
@@ -39,17 +47,73 @@ public class PlanetChunk : Node
      */
     public void BuildTheChunk()
     {
-        GD.Print("Game cs - Starting");
-        chunkData = new Cube[4, 4, 4];
-        chunkData[0, 0, 0] = new Cube(new Vector3(0, 0, 0), new Color(1, 0, 0, 1));
-        chunkData[1, 0, 0] = new Cube(new Vector3(1, 0, 0), new Color(0, 1, 0, 1));
-        GD.Print("Game cs - calling Drawing cube");
+        float red;
+        float green;
+        float blue;
+        Random rnd = new Random();
+        for (int y = 0; y < planet.chunkSize; y++)
+        {
+            for (int z = 0; z < planet.chunkSize; z++)
+            {
+                for (int x = 0; x < planet.chunkSize; x++)
+                {
+                    // generate cube - solid or space/air?
+                    Vector3 cubePosition = new Vector3(Translation.x + x,
+                                                        Translation.y + y,
+                                                        Translation.z + z);
 
-        chunkData[0, 0, 0].DrawCube();
-        chunkData[1, 0, 0].DrawCube();
+                    //         Debug.Log(" CHUNK NAME : " + planetChunk.name);
+                    red = rnd.Next(0, 2);
+                    green = rnd.Next(0, 2);
+                    blue = rnd.Next(0, 2);
+                    chunkData[x, y, z] = new Cube(this, cubePosition, new Color(red, green, blue, 1));
 
-        AddChild(chunkData[0, 0, 0]); // place cube to chunk
-        AddChild(chunkData[1, 0, 0]); // place cube to chunk
+                    AddChild(chunkData[x, y, z]); // make the cube a child of the chunk
+                    // create new cube
+        /*            if (IsOuterLayer(cubePosition))
+                    {
+                        CubeIsSolid[x, y, z] = true;
+                    }
+                    else // set cube to SPACE
+                    {
+                        CubeIsSolid[x, y, z] = false;
+                    } */
+
+                }
+            }
+        }
+
+    }
+
+
+    /*
+     * Draw the cubes that are on the surface of the planet.
+     * Cubes within the planet will be drawn as and when digging/terrain 
+     * manipulation occurs.
+     */
+    public void DrawChunk()
+    {
+        // DRAW THE CHUNK
+        for (int y = 0; y < planet.chunkSize; y++)
+        {
+            for (int z = 0; z < planet.chunkSize; z++)
+            {
+                for (int x = 0; x < planet.chunkSize; x++)
+                {
+                    // display cubes that are set to SOLID (surface area cubes only)
+                    //       if (CubeIsSolid[x, y, z])
+                    //       {
+                    // draw the cube and set it to SOLID
+                    chunkData[x, y, z].DrawCube();
+                    //       }
+                    //   }
+                }
+            }
+            //      CombineCubes();
+            //      MeshCollider collider = planetChunk.gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
+            //      collider.sharedMesh = planetChunk.transform.GetComponent<MeshFilter>().mesh;
+        }
+
     }
 
 }

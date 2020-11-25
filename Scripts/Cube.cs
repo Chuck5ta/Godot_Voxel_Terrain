@@ -34,7 +34,7 @@ public class Cube : Node
     //  }
 
     // Cube contructor
-    public Cube(Vector3 cubePosition, Color cubeColour)
+    public Cube(PlanetChunk planetChunk, Vector3 cubePosition, Color cubeColour)
     {
         GD.Print("Cube constructor");
         cubeLocation = cubePosition;
@@ -86,7 +86,6 @@ public class Cube : Node
 
         // Set the material and colour
         SpatialMaterial newMaterial = new SpatialMaterial();
-    //    newMaterial.AlbedoColor = new Color(1, 0, 0, 1); // red
         newMaterial.AlbedoColor = cubeColour; // red
         quad.MaterialOverride = newMaterial;
 
