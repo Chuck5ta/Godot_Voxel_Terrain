@@ -91,7 +91,7 @@ public class PlanetChunk : Spatial
 
                     chunkColour = planet.GetNextColor();
 
-                    chunkData[x, y, z] = new Cube(this, cubePosition, chunkColour);
+                    chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkColour);
 
                     AddChild(chunkData[x, y, z].cube);
 
@@ -129,7 +129,7 @@ public class PlanetChunk : Spatial
                     // display cubes that are set to SOLID (surface area cubes only)
                     if (CubeIsSolid[x, y, z])
                     {
-                        // draw the cube and set it to SOLID
+                        // draw the cube
                         chunkData[x, y, z].DrawCube();
                     }
                 }

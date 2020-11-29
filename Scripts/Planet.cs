@@ -6,7 +6,7 @@ public class Planet : Spatial
 {
     public int planetSize = 10; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
     public int chunkSize = 2; // diameter -  size of chunk in cubes (e.g. size of 10 = 10x10x10 = 1000 cubes in total)
-    public int planetRadius = 7; // number of cubes (e.g. size if 12 = radius of 12 and therefore a diameter of 24)
+    public int planetRadius = 6; // number of cubes (e.g. size if 12 = radius of 12 and therefore a diameter of 24)
     public float fPlanetCentreXYZValue = 0;
     public Vector3 planetCentre; // X, Y, Z coordinates - calculate this based on the other values : (planetSize * chunkSize) / 2
 
@@ -53,29 +53,32 @@ public class Planet : Spatial
         Random rnd = new Random();
         {
             pickColour = rnd.Next(0, 8);
-        } while (pickColour == previousColour) ; // stop it poicking the same colour in a row
+        } while (pickColour == previousColour) ; // stop it picking the same colour in a row
         switch (pickColour)
         {
             case 1:
-                GD.Print("Print a red chunk");
+    //            GD.Print("Print a red chunk");
                 return red;
             case 2:
-                GD.Print("Print a green chunk");
+    //            GD.Print("Print a green chunk");
                 return green;
             case 3:
-                GD.Print("Print a blue chunk");
+    //            GD.Print("Print a blue chunk");
                 return blue;
             case 4:
-                GD.Print("Print a brown chunk");
+     //           GD.Print("Print a brown chunk");
                 return brown;
             case 5:
-                GD.Print("Print a purple chunk");
+     //           GD.Print("Print a purple chunk");
                 return purple;
             case 6:
-                GD.Print("Print a purple chunk");
+     //           GD.Print("Print a purple chunk");
                 return black;
+            case 7:
+                //           GD.Print("Print a purple chunk");
+                return white;
             default:
-                GD.Print("Print a white chunk");
+     //           GD.Print("Print a white chunk");
                 return brown;
         }
     }

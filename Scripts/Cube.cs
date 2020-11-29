@@ -35,16 +35,17 @@ public class Cube : Node
     //  }
 
     // Cube contructor
-    public Cube(PlanetChunk owner, Vector3 cubePosition, Color cubeColour)
+    public Cube(PlanetChunk owner, int currentX, int currentY, int currentZ, 
+        Vector3 cubePosition, Color cubeColour)
     {
         this.owner = owner;
         cubeLocation = cubePosition;
         this.cubeColour = cubeColour;
         cube = new CSGCombiner(); // TODO: keep as CSGCombiner or change to Spatial?
 
-        //    this.currentX = currentX;
-        //    this.currentY = currentY;
-        //    this.currentZ = currentZ;
+        this.currentX = currentX;
+        this.currentY = currentY;
+        this.currentZ = currentZ;
     }
 
     public void CreateQuad(Vector3 vertex0, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3)
@@ -103,9 +104,9 @@ public class Cube : Node
             GenerateBottomQuad();
         if (!HasSolidNeighbour(currentX, currentY, currentZ + 1))
             GenerateBackQuad();
-        if (!HasSolidNeighbour(currentX - 1, currentY, currentZ))
-            GenerateLeftQuad();
         if (!HasSolidNeighbour(currentX + 1, currentY, currentZ))
+            GenerateLeftQuad();
+        if (!HasSolidNeighbour(currentX - 1, currentY, currentZ))
             GenerateRightQuad();
     }
 
@@ -127,8 +128,8 @@ public class Cube : Node
         // Front quad
         frontQuadVertices[0] = new Vector3(cubeLocation.x, cubeLocation.y, cubeLocation.z);
         frontQuadVertices[1] = new Vector3(cubeLocation.x, cubeLocation.y + 1, cubeLocation.z);
-        frontQuadVertices[2] = new Vector3(cubeLocation.x + 1, cubeLocation.y, cubeLocation.z);
-        frontQuadVertices[3] = new Vector3(cubeLocation.x + 1, cubeLocation.y + 1, cubeLocation.z);
+        frontQuadVertices[2] = new Vector3(cubeLocation.x - 1, cubeLocation.y, cubeLocation.z);
+        frontQuadVertices[3] = new Vector3(cubeLocation.x - 1, cubeLocation.y + 1, cubeLocation.z);
 
         DisplayQuad(frontQuadVertices);
     }
@@ -137,16 +138,16 @@ public class Cube : Node
         // Top quad
         topQuadVertices[0] = new Vector3(cubeLocation.x, cubeLocation.y + 1, cubeLocation.z);
         topQuadVertices[1] = new Vector3(cubeLocation.x, cubeLocation.y + 1, cubeLocation.z + 1);
-        topQuadVertices[2] = new Vector3(cubeLocation.x + 1, cubeLocation.y + 1, cubeLocation.z);
-        topQuadVertices[3] = new Vector3(cubeLocation.x + 1, cubeLocation.y + 1, cubeLocation.z + 1);
+        topQuadVertices[2] = new Vector3(cubeLocation.x - 1, cubeLocation.y + 1, cubeLocation.z);
+        topQuadVertices[3] = new Vector3(cubeLocation.x - 1, cubeLocation.y + 1, cubeLocation.z + 1);
 
         DisplayQuad(topQuadVertices);
     }
     void GenerateBottomQuad()
     {
         // Bottom quad
-        bottomQuadVertices[0] = new Vector3(cubeLocation.x + 1, cubeLocation.y, cubeLocation.z);
-        bottomQuadVertices[1] = new Vector3(cubeLocation.x + 1, cubeLocation.y, cubeLocation.z + 1);
+        bottomQuadVertices[0] = new Vector3(cubeLocation.x - 1, cubeLocation.y, cubeLocation.z);
+        bottomQuadVertices[1] = new Vector3(cubeLocation.x - 1, cubeLocation.y, cubeLocation.z + 1);
         bottomQuadVertices[2] = new Vector3(cubeLocation.x, cubeLocation.y, cubeLocation.z);
         bottomQuadVertices[3] = new Vector3(cubeLocation.x, cubeLocation.y, cubeLocation.z + 1);
 
@@ -155,8 +156,8 @@ public class Cube : Node
     void GenerateBackQuad()
     {
         // Back quad
-        backQuadVertices[0] = new Vector3(cubeLocation.x + 1, cubeLocation.y, cubeLocation.z + 1);
-        backQuadVertices[1] = new Vector3(cubeLocation.x + 1, cubeLocation.y + 1, cubeLocation.z + 1);
+        backQuadVertices[0] = new Vector3(cubeLocation.x - 1, cubeLocation.y, cubeLocation.z + 1);
+        backQuadVertices[1] = new Vector3(cubeLocation.x - 1, cubeLocation.y + 1, cubeLocation.z + 1);
         backQuadVertices[2] = new Vector3(cubeLocation.x, cubeLocation.y, cubeLocation.z + 1);
         backQuadVertices[3] = new Vector3(cubeLocation.x, cubeLocation.y + 1, cubeLocation.z + 1);
 
@@ -175,10 +176,10 @@ public class Cube : Node
     void GenerateRightQuad()
     {
         // Right quad
-        rightQuadVertices[0] = new Vector3(cubeLocation.x + 1, cubeLocation.y, cubeLocation.z);
-        rightQuadVertices[1] = new Vector3(cubeLocation.x + 1, cubeLocation.y + 1, cubeLocation.z);
-        rightQuadVertices[2] = new Vector3(cubeLocation.x + 1, cubeLocation.y, cubeLocation.z + 1);
-        rightQuadVertices[3] = new Vector3(cubeLocation.x + 1, cubeLocation.y + 1, cubeLocation.z + 1);
+        rightQuadVertices[0] = new Vector3(cubeLocation.x - 1, cubeLocation.y, cubeLocation.z);
+        rightQuadVertices[1] = new Vector3(cubeLocation.x - 1, cubeLocation.y + 1, cubeLocation.z);
+        rightQuadVertices[2] = new Vector3(cubeLocation.x - 1, cubeLocation.y, cubeLocation.z + 1);
+        rightQuadVertices[3] = new Vector3(cubeLocation.x - 1, cubeLocation.y + 1, cubeLocation.z + 1);
 
         DisplayQuad(rightQuadVertices);
     }
