@@ -14,6 +14,20 @@ public class Universe : Node
 {
     public static Planet planet;
 
+    public static string BuildPlanetChunkName(Vector3 position) // for a 3D terrain
+    {
+        return (int)position.x + "_" +   // leave this, as we may need to implement a cubish world, instead of the quad one we have
+                (int)position.y + "_" +
+                (int)position.z;
+    }
+
+    public static string BuildPlanetChunkName(float X, float Y, float Z) // for a 3D terrain
+    {
+        return (int)X + "_" +   // leave this, as we may need to implement a cubish world, instead of the quad one we have
+                (int)Y + "_" +
+                (int)Z;
+    }
+
     /*
      * This kicks off the building of a single planet
      */

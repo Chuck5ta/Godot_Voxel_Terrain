@@ -3,7 +3,7 @@ using System;
 
 public class Cube : Node
 {
-    public Node cube;
+    public CSGCombiner cube;
 
     public Vector3 cubeLocation;
 
@@ -36,18 +36,17 @@ public class Cube : Node
     // Cube contructor
     public Cube(PlanetChunk planetChunk, Vector3 cubePosition, Color cubeColour)
     {
-        GD.Print("Cube constructor");
         cubeLocation = cubePosition;
         this.cubeColour = cubeColour;
-        cube = new Node();
-    //    this.currentX = currentX;
-    //    this.currentY = currentY;
-    //    this.currentZ = currentZ;
+        cube = new CSGCombiner(); // TODO: keep as CSGCombiner or change to Spatial?
+
+        //    this.currentX = currentX;
+        //    this.currentY = currentY;
+        //    this.currentZ = currentZ;
     }
 
     public void CreateQuad(Vector3 vertex0, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3)
     {
-        GD.Print("Creating quad");
         // Generate quad mesh (2 triangles)
 
         Vector3[] vertices = { vertex0,   //top-left
@@ -86,15 +85,13 @@ public class Cube : Node
 
         // Set the material and colour
         SpatialMaterial newMaterial = new SpatialMaterial();
-        newMaterial.AlbedoColor = cubeColour; // red
+        newMaterial.AlbedoColor = cubeColour; 
         quad.MaterialOverride = newMaterial;
 
-        AddChild(quad); // add quad to the cube node (makes it visible?)
-        GD.Print("Creating quad completed");
+        cube.AddChild(quad); // add quad to the cube node
     }
     public void DrawCube()
     {
-        GD.Print("Drawing cube sides");
         // if neighbouring cube is SPACE, then draw the quad
         //     if (!HasSolidNeighbour(currentX, currentY, currentZ - 1))
         GenerateFrontQuad();
@@ -173,7 +170,6 @@ public class Cube : Node
 
     public void DisplayQuad(Vector3[] quadVertices)
     {
-        GD.Print("DisplayQuad");
         CreateQuad(quadVertices[0], quadVertices[1], quadVertices[2], quadVertices[3]); // TODO: need to name the quad!!!
     }
 
