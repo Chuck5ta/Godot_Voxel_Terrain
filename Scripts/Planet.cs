@@ -4,9 +4,9 @@ using System.Collections.Generic; // Dictionary structure
 
 public class Planet : Spatial
 {
-    public int planetSize = 2; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
+    public int planetSize = 10; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
     public int chunkSize = 2; // diameter -  size of chunk in cubes (e.g. size of 10 = 10x10x10 = 1000 cubes in total)
-    public int planetRadius = 2; // number of cubes (e.g. size if 12 = radius of 12 and therefore a diameter of 24)
+    public int planetRadius = 7; // number of cubes (e.g. size if 12 = radius of 12 and therefore a diameter of 24)
     public float fPlanetCentreXYZValue = 0;
     public Vector3 planetCentre; // X, Y, Z coordinates - calculate this based on the other values : (planetSize * chunkSize) / 2
 
@@ -28,6 +28,9 @@ public class Planet : Spatial
     // Planet constructor 
     public Planet()
     {
+        fPlanetCentreXYZValue = planetSize * chunkSize / 2;
+        planetCentre = new Vector3(fPlanetCentreXYZValue, fPlanetCentreXYZValue, fPlanetCentreXYZValue);
+
         planetChunks = new Dictionary<string, PlanetChunk>();
 
         // build the planet
@@ -44,7 +47,7 @@ public class Planet : Spatial
      * This is used to give the chunks each a different material.
      * TODO: Delete this when no longer requred - when everything works
      */
-    Color GetNextColor()
+    public Color GetNextColor()
     {
         int pickColour = 1;
         Random rnd = new Random();

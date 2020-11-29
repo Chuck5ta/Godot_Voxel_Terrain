@@ -11,7 +11,13 @@ public class PlanetChunk : Spatial
     public CSGCombiner combiner; // combine all the cubes into the one chunk (seems to be the best way to do this in Godot)
 
     public Vector3 chunkPosition; // is this used here??????
+    public float chunkXIndex, chunkYIndex, chunkZIndex; // chunk location in the world, where 1st chunk is 0,0,0 next chunk along the X axis is 1,0,0 and next is 2,0,0
+                                                        // next chunk from 0,0,0 along the Y axis is 0,1,0 and the next is 0,2,0 etc.
+                                                        // These are required for calculating which parts of the chunk to draw for the planet
+
     Color chunkColour;
+
+    public bool[,,] CubeIsSolid; // states if a block/cube is space or a solid 
 
 
     // Called when the node enters the scene tree for the first time.
@@ -44,11 +50,17 @@ public class PlanetChunk : Spatial
 
         planet = owner; // the planet this chunk is part of (child of) TODO: IS THIS NEEDED??? I do no think so
 
-        chunkData = new Cube[planet.chunkSize, planet.chunkSize, planet.chunkSize];
 
         this.chunkPosition = chunkPosition;
 
+        this.chunkXIndex = chunkXIndex;
+        this.chunkYIndex = chunkYIndex;
+        this.chunkZIndex = chunkZIndex;
+
         this.chunkColour = chunkColour;
+
+        chunkData = new Cube[planet.chunkSize, planet.chunkSize, planet.chunkSize];
+        CubeIsSolid = new bool[owner.chunkSize, owner.chunkSize, owner.chunkSize];
 
     }
 
@@ -77,19 +89,21 @@ public class PlanetChunk : Spatial
 
                     Vector3 cubePosition = new Vector3(x, y, z);
 
+                    chunkColour = planet.GetNextColor();
+
                     chunkData[x, y, z] = new Cube(this, cubePosition, chunkColour);
 
                     AddChild(chunkData[x, y, z].cube);
 
                     // create new cube
-                    /*            if (IsOuterLayer(cubePosition))
-                                {
-                                    CubeIsSolid[x, y, z] = true;
-                                }
-                                else // set cube to SPACE
-                                {
-                                    CubeIsSolid[x, y, z] = false;
-                                } */
+                    if (IsOuterLayer(cubePosition))
+                    {
+                        CubeIsSolid[x, y, z] = true;
+                    }
+                    else // set cube to SPACE
+                    {
+                        CubeIsSolid[x, y, z] = false;
+                    } 
 
                 }
             }
@@ -113,16 +127,40 @@ public class PlanetChunk : Spatial
                 for (int x = 0; x < planet.chunkSize; x++)
                 {
                     // display cubes that are set to SOLID (surface area cubes only)
-                    //       if (CubeIsSolid[x, y, z])
-                    //       {
-                    // draw the cube and set it to SOLID
-                    chunkData[x, y, z].DrawCube();
-                    //       }
-                    //   }
+                    if (CubeIsSolid[x, y, z])
+                    {
+                        // draw the cube and set it to SOLID
+                        chunkData[x, y, z].DrawCube();
+                    }
                 }
             }
         }
 
+    }
+
+    /*
+     * Tests to see if the cube is part of the outer layer of the planet. If so
+     * then we want to have it visible.
+     * If the cube is not on the outer layer, then it is set to SPACE and is invisible
+     */
+    private bool IsOuterLayer(Vector3 cubePosition)
+    {
+        // d is the distance from the cube's location to the centre of the planet
+        // d = ((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)^1/2  
+        float d = Mathf.Sqrt(((cubePosition.x + chunkXIndex * planet.chunkSize - planet.planetCentre.x) * (cubePosition.x + chunkXIndex * planet.chunkSize - planet.planetCentre.x)) +
+                              ((cubePosition.y + chunkYIndex * planet.chunkSize - planet.planetCentre.y) * (cubePosition.y + chunkYIndex * planet.chunkSize - planet.planetCentre.y)) +
+                              ((cubePosition.z + chunkZIndex * planet.chunkSize - planet.planetCentre.z) * (cubePosition.z + chunkZIndex * planet.chunkSize - planet.planetCentre.z))
+                            );
+
+        //   Debug.Log("D is " + d + " : " + "Planet radius: " + owner.planetRadius + " - centre: " + owner.planetCentre);
+        //   Debug.Log("Chunk size is " + owner.chunkSize);
+        //   Debug.Log("Chunk position is " + chunkPosition);
+        //   Debug.Log("Cube position is " + cubePosition);
+
+        if (d < planet.planetRadius && planet.planetRadius - d < 2) // ensures that only the surface cubes are generated
+            return true;
+
+        return false;
     }
 
 }

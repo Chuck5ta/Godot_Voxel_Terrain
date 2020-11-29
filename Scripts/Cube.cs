@@ -4,6 +4,7 @@ using System;
 public class Cube : Node
 {
     public CSGCombiner cube;
+    public PlanetChunk owner;
 
     public Vector3 cubeLocation;
 
@@ -34,8 +35,9 @@ public class Cube : Node
     //  }
 
     // Cube contructor
-    public Cube(PlanetChunk planetChunk, Vector3 cubePosition, Color cubeColour)
+    public Cube(PlanetChunk owner, Vector3 cubePosition, Color cubeColour)
     {
+        this.owner = owner;
         cubeLocation = cubePosition;
         this.cubeColour = cubeColour;
         cube = new CSGCombiner(); // TODO: keep as CSGCombiner or change to Spatial?
@@ -93,18 +95,31 @@ public class Cube : Node
     public void DrawCube()
     {
         // if neighbouring cube is SPACE, then draw the quad
-        //     if (!HasSolidNeighbour(currentX, currentY, currentZ - 1))
-        GenerateFrontQuad();
-   //     if (!HasSolidNeighbour(currentX, currentY + 1, currentZ))
+        if (!HasSolidNeighbour(currentX, currentY, currentZ - 1))
+            GenerateFrontQuad();
+        if (!HasSolidNeighbour(currentX, currentY + 1, currentZ))
             GenerateTopQuad();
-   //     if (!HasSolidNeighbour(currentX, currentY - 1, currentZ))
+        if (!HasSolidNeighbour(currentX, currentY - 1, currentZ))
             GenerateBottomQuad();
-   //     if (!HasSolidNeighbour(currentX, currentY, currentZ + 1))
+        if (!HasSolidNeighbour(currentX, currentY, currentZ + 1))
             GenerateBackQuad();
-   //     if (!HasSolidNeighbour(currentX - 1, currentY, currentZ))
+        if (!HasSolidNeighbour(currentX - 1, currentY, currentZ))
             GenerateLeftQuad();
-   //     if (!HasSolidNeighbour(currentX + 1, currentY, currentZ))
+        if (!HasSolidNeighbour(currentX + 1, currentY, currentZ))
             GenerateRightQuad();
+    }
+
+    public bool HasSolidNeighbour(int x, int y, int z)
+    {
+        //   Cube[,,] cube = parent.GetComponent<PlanetChunk>().chunkData;
+        try
+        {
+            if (owner.CubeIsSolid[x, y, z])
+                return true;
+        }
+        catch (System.IndexOutOfRangeException ex) { }
+
+        return false; // cube is air, water, or similar
     }
 
     public void GenerateFrontQuad()
