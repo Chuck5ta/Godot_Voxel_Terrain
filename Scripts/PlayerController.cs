@@ -7,8 +7,7 @@ public class PlayerController : KinematicBody
     public float moveSpeed = 5f;
     // Vector3 euler; // (oiler) used in the calculation for rotating the player character
     float turningSpeed = 0.01f;
-    private float rotationX = 0f;
-    private float rotationY = 0f;
+    float rotationSpeed = 0.05f;
 
 
     // Called when the node enters the scene tree for the first time.
@@ -19,8 +18,26 @@ public class PlayerController : KinematicBody
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
+ //   public override void _Process(float delta)
+ //   {
+ //   }
+
+
+    /*
+     * Rotate/turn the Player character
+     * This only requires the mouse to move, not for a button to be pressed
+     */
+    public override void _Input(InputEvent @event)
     {
+        if (@event is InputEventMouseMotion mouseMotion)
+        {
+            float horizontalMovement = turningSpeed * mouseMotion.Relative.x;
+            float verticalMovement = turningSpeed * mouseMotion.Relative.y;
+            RotateObjectLocal(Vector3.Up, -horizontalMovement); // first rotate about Y
+            RotateObjectLocal(Vector3.Right, -verticalMovement); // then rotate about X
+            // TODO: left and right turning is a little odd - tends to lean
+        }
+
     }
 
     /*
@@ -60,38 +77,27 @@ public class PlayerController : KinematicBody
         {
             MoveAndSlide(-Transform.basis.y * moveSpeed);
         }
-    }
-
-    /*
-     * Rotate/turn the Player character
-     * This only requires the mouse to move, not for a button to be pressed
-     */
-    public override void _Input(InputEvent @event)
-    {
-        if (@event is InputEventMouseMotion mouseMotion)
+        // Turn anticlockwise
+        else if (keyEvent.Scancode == (int)KeyList.Q)
         {
-            // modify accumulated mouse rotation
-            rotationX += -mouseMotion.Relative.x * turningSpeed;
-            rotationY += -mouseMotion.Relative.y * turningSpeed;
-
-            // reset rotation
-            Transform transform = Transform;
-            transform.basis = Basis.Identity;
-            Transform = transform;
-
-            RotateObjectLocal(Vector3.Up, rotationX); // first rotate about Y
-            RotateObjectLocal(Vector3.Right, rotationY); // then rotate about X
+            RotateObjectLocal(Vector3.Back, rotationSpeed);
+        }
+        // Turn clockwise
+        else if (keyEvent.Scancode == (int)KeyList.E)
+        {
+            RotateObjectLocal(Vector3.Forward, rotationSpeed);
         }
     }
+
 
     // TODO: Use this for manipulating the terrain (digging/building)
     public override void _UnhandledInput(InputEvent mouseEvent)
     {
         base._UnhandledInput(mouseEvent);
 
-        // Turning
         if (mouseEvent is InputEventMouseButton eventMouseButton)
         {
+            /*
             if (eventMouseButton.ButtonIndex == (int)ButtonList.Left)
                 GD.Print("Left Mouse");
             else if (eventMouseButton.ButtonIndex == (int)ButtonList.Middle)
@@ -99,8 +105,9 @@ public class PlayerController : KinematicBody
             else if (eventMouseButton.ButtonIndex == (int)ButtonList.Right)
             {
                 GD.Print("Right Mouse");
-                RotateObjectLocal(Vector3.Right, Mathf.Pi);
+           //    RotateObjectLocal(Vector3.Right, Mathf.Pi);
             }
+            */
         }
 
     }

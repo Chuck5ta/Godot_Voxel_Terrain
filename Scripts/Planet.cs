@@ -4,15 +4,13 @@ using System.Collections.Generic; // Dictionary structure
 
 public class Planet : Spatial
 {
-    public int planetSize = 10; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
+    public int planetSize = 4; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
     public int chunkSize = 2; // diameter -  size of chunk in cubes (e.g. size of 10 = 10x10x10 = 1000 cubes in total)
     public int planetRadius = 6; // number of cubes (e.g. size if 12 = radius of 12 and therefore a diameter of 24)
     public float fPlanetCentreXYZValue = 0;
     public Vector3 planetCentre; // X, Y, Z coordinates - calculate this based on the other values : (planetSize * chunkSize) / 2
 
     public Dictionary<string, PlanetChunk> planetChunks;
-
-
 
     Color red = new Color(1,0,0,1);
     Color green = new Color(0, 1, 0, 1);
@@ -21,7 +19,6 @@ public class Planet : Spatial
     Color purple = new Color(1, 1, 0, 1);
     Color black = new Color(0, 0, 0, 1);
     Color white = new Color(1, 1, 1, 1);
-
     int previousColour = 99;
 
 
@@ -57,28 +54,20 @@ public class Planet : Spatial
         switch (pickColour)
         {
             case 1:
-    //            GD.Print("Print a red chunk");
                 return red;
             case 2:
-    //            GD.Print("Print a green chunk");
                 return green;
             case 3:
-    //            GD.Print("Print a blue chunk");
                 return blue;
             case 4:
-     //           GD.Print("Print a brown chunk");
                 return brown;
             case 5:
-     //           GD.Print("Print a purple chunk");
                 return purple;
             case 6:
-     //           GD.Print("Print a purple chunk");
                 return black;
             case 7:
-                //           GD.Print("Print a purple chunk");
                 return white;
             default:
-     //           GD.Print("Print a white chunk");
                 return brown;
         }
     }
