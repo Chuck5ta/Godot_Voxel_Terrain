@@ -18,6 +18,8 @@ public class PlanetChunk : Spatial
     Color chunkColour; // TODO: not used at the moment
     SpatialMaterial chunkMaterial;
 
+    CustomMaterials customMaterials;
+
     public bool[,,] CubeIsSolid; // states if a block/cube is space or a solid 
 
 
@@ -42,7 +44,7 @@ public class PlanetChunk : Spatial
      * 
      * e.g. chunk 0 will be based at 0,0,0 in the Universe
      */
-    public PlanetChunk(Planet owner, Vector3 chunkPosition, Color chunkColour, float chunkXIndex, float chunkYIndex, float chunkZIndex)
+    public PlanetChunk(Planet owner, Vector3 chunkPosition, SpatialMaterial chunkMaterial, float chunkXIndex, float chunkYIndex, float chunkZIndex)
     {
         planetChunk = new Spatial();
         name = "Chunk_" + Universe.BuildPlanetChunkName(chunkXIndex, chunkYIndex, chunkZIndex);
@@ -51,43 +53,21 @@ public class PlanetChunk : Spatial
 
         planet = owner; // the planet this chunk is part of (child of) TODO: IS THIS NEEDED??? I do no think so
 
-
         this.chunkPosition = chunkPosition;
 
         this.chunkXIndex = chunkXIndex;
         this.chunkYIndex = chunkYIndex;
         this.chunkZIndex = chunkZIndex;
 
-        this.chunkColour = chunkColour;
+        customMaterials = new CustomMaterials();
+        this.chunkMaterial = chunkMaterial;
 
         chunkData = new Cube[planet.chunkSize, planet.chunkSize, planet.chunkSize];
         CubeIsSolid = new bool[owner.chunkSize, owner.chunkSize, owner.chunkSize];
-
     }
 
     public PlanetChunk() // TODO: is this needed?????
     {
-    }
-
-
-    public SpatialMaterial RetrieveMaterial()
-    {
-        ImageTexture imageTexture = new ImageTexture();
-
-        Image image = new Image();
-        if (image.Load("res://Textures/seamless-grass-texture.jpg") != 0)
-        {
-            GD.Print("Failed to locate the image file!");
-        }
-
-        imageTexture.CreateFromImage(image);
-
-        // Set the material and colour
-        SpatialMaterial newMaterial = new SpatialMaterial();
-        //      newMaterial.AlbedoColor = cubeColour; // TODO: not used at the moment
-        newMaterial.AlbedoTexture = imageTexture;
-
-        return newMaterial;
     }
 
 
@@ -106,16 +86,8 @@ public class PlanetChunk : Spatial
                 for (int x = 0; x < planet.chunkSize; x++)
                 {
                     // generate cube - solid or space/air?
-              //      Vector3 cubePosition = new Vector3(Translation.x + x,
-              //                                          Translation.y + y,
-              //                                          Translation.z + z);
 
                     Vector3 cubePosition = new Vector3(x, y, z);
-
-                    //      chunkColour = planet.GetNextColor();
-                    // chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkColour);
-
-                    chunkMaterial = RetrieveMaterial(); // get a random texture
 
                     chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkMaterial);
 

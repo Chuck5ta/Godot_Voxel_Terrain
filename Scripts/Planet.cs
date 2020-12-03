@@ -4,7 +4,7 @@ using System.Collections.Generic; // Dictionary structure
 
 public class Planet : Spatial
 {
-    public int planetSize = 4; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
+    public int planetSize = 10; // number of chunks (e.g. size of 3 means 3x3x3 = 27 chunks in total)
     public int chunkSize = 2; // diameter -  size of chunk in cubes (e.g. size of 10 = 10x10x10 = 1000 cubes in total)
     public int planetRadius = 6; // number of cubes (e.g. size if 12 = radius of 12 and therefore a diameter of 24)
     public float fPlanetCentreXYZValue = 0;
@@ -21,12 +21,17 @@ public class Planet : Spatial
     Color white = new Color(1, 1, 1, 1);
     int previousColour = 99;
 
+    CustomMaterials customMaterials;
+    SpatialMaterial chunkMaterial;
+
 
     // Planet constructor 
     public Planet()
     {
         fPlanetCentreXYZValue = planetSize * chunkSize / 2;
         planetCentre = new Vector3(fPlanetCentreXYZValue, fPlanetCentreXYZValue, fPlanetCentreXYZValue);
+
+        customMaterials = new CustomMaterials();
 
         planetChunks = new Dictionary<string, PlanetChunk>();
 
@@ -73,9 +78,29 @@ public class Planet : Spatial
     }
 
 
+    /*
+     * This is used to give the chunks each a different material.
+     * TODO: Delete this when no longer requred - when everything works
+     */
+    SpatialMaterial GetNextMaterial(int cubeCount)
+    {
+        switch (cubeCount)
+        {
+            case 0:
+                return customMaterials.RetrieveMaterial(CustomMaterials.sandQuad);
+            case 1:
+                return customMaterials.RetrieveMaterial(CustomMaterials.rockQuad);
+            case 2:
+                return customMaterials.RetrieveMaterial(CustomMaterials.dirtQuad);
+            default:
+                return customMaterials.RetrieveMaterial(CustomMaterials.grassQuad);
+        } 
+    }
+
+
     public void GeneratePlanet()
     {
-        int cubeCount = 1;
+        int cubeCount = 0;
         for (int chunkYIndex = 0; chunkYIndex < planetSize; chunkYIndex++)
         {
             for (int chunkZIndex = 0; chunkZIndex < planetSize; chunkZIndex++)
@@ -87,10 +112,10 @@ public class Planet : Spatial
                                                         Translation.z + (chunkZIndex * chunkSize));
 
                     // THREADING http://www.albahari.com/threading/
-             //       chunkMaterial = GetNextMaterial(cubeCount);
+                    chunkMaterial = GetNextMaterial(cubeCount);
 
                     PlanetChunk planetChunk = new PlanetChunk(this, 
-                        chunkPosition, GetNextColor(), chunkXIndex, chunkYIndex, chunkZIndex); // CHANGE THIS!!! include parameter stating biome (desert, jungle, etc.)
+                        chunkPosition, chunkMaterial, chunkXIndex, chunkYIndex, chunkZIndex); // CHANGE THIS!!! include parameter stating biome (desert, jungle, etc.)
 
                     planetChunks.Add(planetChunk.name, planetChunk);
 
@@ -98,12 +123,11 @@ public class Planet : Spatial
                     planetChunk.DrawChunk();
                     AddChild(planetChunk); // add chunk to the planet
 
-             //     planetChunk.Translate(new Vector3(20, 20, 20));
                     planetChunk.GlobalTranslate(new Vector3(chunkXIndex * chunkSize, chunkYIndex * chunkSize, chunkZIndex * chunkSize));
 
                     cubeCount++;
                     if (cubeCount > 3)
-                        cubeCount = 1;
+                        cubeCount = 0;
                 }
             }
         }
