@@ -8,9 +8,10 @@ public class Cube : Node
 
     public Vector3 cubeLocation;
 
-    public Color cubeColour;
+    public Color cubeColour; // TODO: not used at the moment
+    SpatialMaterial cubeMaterial;
 
-   // private Material cubeMaterial = CustomMaterials.RetrieveMaterial(CustomMaterials.rockQuad);
+    // private Material cubeMaterial = CustomMaterials.RetrieveMaterial(CustomMaterials.rockQuad);
 
     public Vector3[] frontQuadVertices = new Vector3[4];
     public Vector3[] backQuadVertices = new Vector3[4];
@@ -36,11 +37,11 @@ public class Cube : Node
 
     // Cube contructor
     public Cube(PlanetChunk owner, int currentX, int currentY, int currentZ, 
-        Vector3 cubePosition, Color cubeColour)
+        Vector3 cubePosition, SpatialMaterial cubeMaterial)
     {
         this.owner = owner;
         cubeLocation = cubePosition;
-        this.cubeColour = cubeColour;
+        this.cubeMaterial = cubeMaterial;
         cube = new CSGCombiner(); // TODO: keep as CSGCombiner or change to Spatial?
 
         this.currentX = currentX;
@@ -86,10 +87,7 @@ public class Cube : Node
         MeshInstance quad = new MeshInstance();
         quad.Mesh = arr_mesh;
 
-        // Set the material and colour
-        SpatialMaterial newMaterial = new SpatialMaterial();
-        newMaterial.AlbedoColor = cubeColour; 
-        quad.MaterialOverride = newMaterial;
+        quad.MaterialOverride = cubeMaterial; // apply texture - rock, dirt, grass, etc.
 
         cube.AddChild(quad); // add quad to the cube node
     }

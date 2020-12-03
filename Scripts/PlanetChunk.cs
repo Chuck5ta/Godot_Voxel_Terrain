@@ -15,7 +15,8 @@ public class PlanetChunk : Spatial
                                                         // next chunk from 0,0,0 along the Y axis is 0,1,0 and the next is 0,2,0 etc.
                                                         // These are required for calculating which parts of the chunk to draw for the planet
 
-    Color chunkColour;
+    Color chunkColour; // TODO: not used at the moment
+    SpatialMaterial chunkMaterial;
 
     public bool[,,] CubeIsSolid; // states if a block/cube is space or a solid 
 
@@ -68,6 +69,28 @@ public class PlanetChunk : Spatial
     {
     }
 
+
+    public SpatialMaterial RetrieveMaterial()
+    {
+        ImageTexture imageTexture = new ImageTexture();
+
+        Image image = new Image();
+        if (image.Load("res://Textures/seamless-grass-texture.jpg") != 0)
+        {
+            GD.Print("Failed to locate the image file!");
+        }
+
+        imageTexture.CreateFromImage(image);
+
+        // Set the material and colour
+        SpatialMaterial newMaterial = new SpatialMaterial();
+        //      newMaterial.AlbedoColor = cubeColour; // TODO: not used at the moment
+        newMaterial.AlbedoTexture = imageTexture;
+
+        return newMaterial;
+    }
+
+
     /*
      * Generate the planet, but do not draw the cubes at this point.
      * We need generate first, so that we can see where quads need not be
@@ -89,9 +112,12 @@ public class PlanetChunk : Spatial
 
                     Vector3 cubePosition = new Vector3(x, y, z);
 
-                    chunkColour = planet.GetNextColor();
+                    //      chunkColour = planet.GetNextColor();
+                    // chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkColour);
 
-                    chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkColour);
+                    chunkMaterial = RetrieveMaterial(); // get a random texture
+
+                    chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkMaterial);
 
                     AddChild(chunkData[x, y, z].cube);
 
