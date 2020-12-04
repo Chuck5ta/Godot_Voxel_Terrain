@@ -24,12 +24,11 @@ public class CustomMaterials : Node
     private void LoadMaterials(int materialIndex, string pathToMaterial)
     {
         ImageTexture imageTexture = new ImageTexture();
-        Image image = new Image();
-        if (image.Load(pathToMaterial) != 0)
-        {
-            GD.Print("Failed to locate the image file!");
-        }
+
+        Image image = (Image)GD.Load(pathToMaterial);
+
         imageTexture.CreateFromImage(image);
+
         // Set the material
         SpatialMaterial newMaterial = new SpatialMaterial();
         newMaterial.AlbedoTexture = imageTexture;

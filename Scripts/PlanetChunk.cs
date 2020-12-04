@@ -18,8 +18,6 @@ public class PlanetChunk : Spatial
     Color chunkColour; // TODO: not used at the moment
     SpatialMaterial chunkMaterial;
 
-    CustomMaterials customMaterials;
-
     public bool[,,] CubeIsSolid; // states if a block/cube is space or a solid 
 
 
@@ -59,7 +57,6 @@ public class PlanetChunk : Spatial
         this.chunkYIndex = chunkYIndex;
         this.chunkZIndex = chunkZIndex;
 
-        customMaterials = new CustomMaterials();
         this.chunkMaterial = chunkMaterial;
 
         chunkData = new Cube[planet.chunkSize, planet.chunkSize, planet.chunkSize];

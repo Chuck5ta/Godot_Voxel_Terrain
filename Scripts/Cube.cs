@@ -88,6 +88,7 @@ public class Cube : Node
         quad.Mesh = arr_mesh;
 
         quad.MaterialOverride = cubeMaterial; // apply texture - rock, dirt, grass, etc.
+        quad.MaterialOverride = cubeMaterial; // apply texture - rock, dirt, grass, etc.
 
         cube.AddChild(quad); // add quad to the cube node
     }
