@@ -7,7 +7,7 @@ public class PlanetChunk : Spatial
     public Planet planet;
     public string name;
 
-    public Spatial planetChunk;
+    public CSGCombiner planetChunk;
     public CSGCombiner combiner; // combine all the cubes into the one chunk (seems to be the best way to do this in Godot)
 
     public Vector3 chunkPosition; // is this used here??????
@@ -44,7 +44,7 @@ public class PlanetChunk : Spatial
      */
     public PlanetChunk(Planet owner, Vector3 chunkPosition, SpatialMaterial chunkMaterial, float chunkXIndex, float chunkYIndex, float chunkZIndex)
     {
-        planetChunk = new Spatial();
+        planetChunk = new CSGCombiner();
         name = "Chunk_" + Universe.BuildPlanetChunkName(chunkXIndex, chunkYIndex, chunkZIndex);
 
         combiner = new CSGCombiner();
@@ -88,7 +88,8 @@ public class PlanetChunk : Spatial
 
                     chunkData[x, y, z] = new Cube(this, x, y, z, cubePosition, chunkMaterial);
 
-                    AddChild(chunkData[x, y, z].cube);
+                    // Add the cube to a CSGCombiner node, so that we can delete the chunk's meshes in one go (not sure is this will be doable as this stage)
+                    planetChunk.AddChild(chunkData[x, y, z].cube);
 
                     // create new cube
                     if (IsOuterLayer(cubePosition))

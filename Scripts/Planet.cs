@@ -121,9 +121,9 @@ public class Planet : Spatial
 
                     planetChunk.BuildTheChunk();
                     planetChunk.DrawChunk();
-                    AddChild(planetChunk); // add chunk to the planet
-
-                    planetChunk.GlobalTranslate(new Vector3(chunkXIndex * chunkSize, chunkYIndex * chunkSize, chunkZIndex * chunkSize));
+                    AddChild(planetChunk.planetChunk); // add chunk to the planet
+                    // place the chunk in its location within the planet/Universe
+                    planetChunk.planetChunk.GlobalTranslate(new Vector3(chunkXIndex * chunkSize, chunkYIndex * chunkSize, chunkZIndex * chunkSize));
 
                     cubeCount++;
                     if (cubeCount > 3)
